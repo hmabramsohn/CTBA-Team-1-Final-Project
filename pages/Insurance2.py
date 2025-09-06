@@ -17,7 +17,6 @@ insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_n
 # years for date selection
 years = insurance['Year'].unique()
 setUse = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
-print(setUse["ZIP Code"].iloc[1])
 
 # ZIP Code to states dictionaries from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 
@@ -55,7 +54,7 @@ while x < 1:
 		states_dict[i] = "Indiana"
 	for i in list(range(500,517)) + list(range(520,529)):
 		states_dict[i] = "Iowa"
-	for i in [660,662,662] + list(range(664,680)):
+	for i in [660,661,662] + list(range(664,680)):
 		states_dict[i] = "Kansas"
 	for i in range(400,428):
 		states_dict[i] = "Kentucky"
@@ -63,7 +62,7 @@ while x < 1:
 		states_dict[i] = "Louisiana"
 	for i in list(range(206,213)) + list(range(214,220)):
 		states_dict[i] = "Maryland"
-	for i in range(480,499):
+	for i in range(480,500):
 		states_dict[i] = "Michigan"
 	for i in [550,551] + list(range(553,568)):
 		states_dict[i] = "Minnesota"
@@ -103,8 +102,10 @@ while x < 1:
 		states_dict[i] = "Texas"
 	for i in range(840,848):
 		states_dict[i] = "Utah"
-	for i in [201] + list(range(220,247)):
+	for i in [201] + list(range(220,248)):
 		states_dict[i] = "Virginia"
+	for i in range(247, 269):
+		states_dict[i] = "West Virginia"
 	for i in list(range(980,987)) + list(range(988,995)):
 		states_dict[i] = "Washington"
 	for i in [530,531,532] + [534,535] + list(range(537,550)):
@@ -116,7 +117,7 @@ while x < 1:
 
 # CT, ME, NH, NJ, MA, RI, VT need special help because they start with 0
 states_dict.update({
-	"060":"Connecticut", "061:":"Connecticut", "062":"Connecticut", "063":"Connecticut", "064":"Connecticut","065":"Connecticut","066":"Connecticut","067":"Connecticut","068":"Connecticut","069":"Connecticut", #CT
+	"060":"Connecticut", "061":"Connecticut", "062":"Connecticut", "063":"Connecticut", "064":"Connecticut","065":"Connecticut","066":"Connecticut","067":"Connecticut","068":"Connecticut","069":"Connecticut", #CT
 	"039":"Maine","040":"Maine","041":"Maine","042":"Maine","043":"Maine","044":"Maine","045":"Maine","046":"Maine","047":"Maine","048":"Maine","049":"Maine", #ME
 	"010":"Massachusetts","011":"Massachusetts","012":"Massachusetts","013":"Massachusetts","014":"Massachusetts","015":"Massachusetts","016":"Massachusetts","017":"Massachusetts","018":"Massachusetts","019":"Massachusetts","020":"Massachusetts","021":"Massachusetts","022":"Massachusetts","023":"Massachusetts","024":"Massachusetts","025":"Massachusetts","026":"Massachusetts","027":"Massachusetts","055":"Massachusetts", #MA
 	"030":"New Hampshire", "031":"New Hampshire", "032":"New Hampshire","033":"New Hampshire","034":"New Hampshire","035":"New Hampshire","036":"New Hampshire","037":"New Hampshire","038":"New Hampshire", #NH
@@ -126,19 +127,21 @@ states_dict.update({
 	"050":"Vermont","051":"Vermont","052":"Vermont","053":"Vermont","054":"Vermont","056":"Vermont","057":"Vermont","058":"Vermont","059":"Vermont" #VT
 })
 
-print(states_dict)
-
 # Cutter helper to cut zip codes to 3 digits for reference
 def cutter(zipCode):
-	zipCode = str(zipCode[0:3]
+	zipCode = str(zipCode[0:3])
 	#zipCode = zipCode[0:3]
 	return zipCode
 
-print(cutter(setUse.iloc[2,0]))
-states_dict[cutter(setUse.iloc[2,0])]
+# State assignment function helper
+def assign(zipCode):
+	zipCode = cutter(zipCode)
+	state = states_dict[zipCode]
+	return state
 
 # Applying to setUse
-setUse["state"] = setUse["ZIP Code"].apply(lambda row: states_dict[cutter(row["ZIP Code"])])
+setUse["state"] = [assign(x) for x in setUse['ZIP Code']]
+print(setUse.head(2000))
 
 # Page Layout
 layout =  html.Div([
