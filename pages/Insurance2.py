@@ -18,10 +18,11 @@ insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_n
 years = insurance['Year'].unique()
 setUse = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
 
-# ZIP Code to states dictionaries from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
+# ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 
+# Creating a dictionary to later assign to our DataFrame.
 states_dict = {}
-# Finish adding states. Fix return functions
+# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except some exceptions.
 x = 0
 while x < 1:
 	for i in list(range(350,353)) + list(range(354,370)):
@@ -115,7 +116,7 @@ while x < 1:
 	states_dict = {str(key): value for key, value in states_dict.items()}
 	x += 1
 
-# CT, ME, NH, NJ, MA, RI, VT need special help because they start with 0
+# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded in this scenario as their zip codes begin with 0.
 states_dict.update({
 	"060":"Connecticut", "061":"Connecticut", "062":"Connecticut", "063":"Connecticut", "064":"Connecticut","065":"Connecticut","066":"Connecticut","067":"Connecticut","068":"Connecticut","069":"Connecticut", #CT
 	"039":"Maine","040":"Maine","041":"Maine","042":"Maine","043":"Maine","044":"Maine","045":"Maine","046":"Maine","047":"Maine","048":"Maine","049":"Maine", #ME
@@ -127,13 +128,13 @@ states_dict.update({
 	"050":"Vermont","051":"Vermont","052":"Vermont","053":"Vermont","054":"Vermont","056":"Vermont","057":"Vermont","058":"Vermont","059":"Vermont" #VT
 })
 
-# Cutter helper to cut zip codes to 3 digits for reference
+# This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
 def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
 	#zipCode = zipCode[0:3]
 	return zipCode
 
-# State assignment function helper
+# This function assigns the cut zip code to a state in states_dict.
 def assign(zipCode):
 	zipCode = cutter(zipCode)
 	state = states_dict[zipCode]
