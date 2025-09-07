@@ -131,7 +131,6 @@ states_dict.update({
 # This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
 def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
-	#zipCode = zipCode[0:3]
 	return zipCode
 
 # This function assigns the cut zip code to a state in states_dict.
@@ -142,7 +141,6 @@ def assign(zipCode):
 
 # Applying to setUse
 setUse["state"] = [assign(x) for x in setUse['ZIP Code']]
-print(setUse.head(2000))
 
 # Page Layout
 layout =  html.Div([
@@ -167,7 +165,8 @@ layout =  html.Div([
     [Input("mapYearSlider", "value"),
      Input("mapToggle", "value")]
 )
-def 
+def mapSet():
+	
 
 # Function: 
 # If mapYearSlider == Year, display that year
