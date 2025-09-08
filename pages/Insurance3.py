@@ -1,51 +1,175 @@
+#This page contains code to 
+
 #Importing Libraries
-from dash import html, dcc, Input, Output, callback, register_page, dash
+from dash import Dash, html, dcc, Input, Output, callback, register_page
 import pandas as pd
 import plotly.express as px
-from pathlib import Path
 
-dash.register_page(__name__)
- 
-DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "InsuranceData.csv"
+# For local testing
+app = Dash(__name__)
+register_page(__name__)
 
-df = pd.read_csv(DATA_PATH)
+# Raw dataset
+insurance = pd.read_excel("Insurance/data/InsuranceData.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
+
+# Normalize column names
+df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy"]].rename(
+    columns={
+        "ZIP Code": "zip",
+        "Year": "year",
+        "Premiums Per Policy": "premium_per_policy",
+    }
+)
+
+# ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
+
+# Creating a dictionary to later assign to our DataFrame.
+states_dict = {}
+# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except some exceptions.
+x = 0
+while x < 1:
+	for i in list(range(350,353)) + list(range(354,370)):
+		states_dict[str(i)] = "AL"
+	for i in range(995,1000):
+		states_dict[i] = "AK"
+	for i in list(range(850,854)) + list(range(855,858)) + list(range(859, 861)) + list(range(863,866)):
+		states_dict[i] = "AZ"
+	for i in range(716,730):
+		states_dict[i] = "AR"
+	for i in list(range(900,909)) + list(range(910,929)) + list(range(930,962)):
+		states_dict[i] = "CA"
+	for i in range(800,817):
+		states_dict[i] = "CO"
+	for i in range(197,200):
+		states_dict[i] = "DE"
+	for i in [200] + list(range(202,206)) + [569]:
+		states_dict[i] = "DC"
+	for i in list(range(320,340)) + [341, 342, 344, 346, 347, 349]:
+		states_dict[i] = "FL"
+	for i in list(range(300,320)) + [398, 399]:
+		states_dict[i] = "GA"
+	for i in [967, 968]:
+		states_dict[i] = "HI"
+	for i in range(832,839):
+		states_dict[i] = "ID"
+	for i in list(range(600,621)) + list(range(622,630)):
+		states_dict[i] = "IL"
+	for i in range(460,480):
+		states_dict[i] = "IN"
+	for i in list(range(500,517)) + list(range(520,529)):
+		states_dict[i] = "IA"
+	for i in [660,661,662] + list(range(664,680)):
+		states_dict[i] = "KS"
+	for i in range(400,428):
+		states_dict[i] = "KY"
+	for i in [700,701] + list(range(703,709)) + list(range(710,715)):
+		states_dict[i] = "LA"
+	for i in list(range(206,213)) + list(range(214,220)):
+		states_dict[i] = "MD"
+	for i in range(480,500):
+		states_dict[i] = "MI"
+	for i in [550,551] + list(range(553,568)):
+		states_dict[i] = "MN"
+	for i in range(386,398):
+		states_dict[i] = "MS"
+	for i in [630,631] + list(range(633,642)) + list(range(644,659)):
+		states_dict[i] = "MO"
+	for i in range(590,600):
+		states_dict[i] = "MT"
+	for i in [680,681] + list(range(683,694)):
+		states_dict[i] = "NE"
+	for i in [889,890,891] + [893,894,895] + [897,898]:
+		states_dict[i] = "NV"
+	for i in [870,871] + [873,874,875] + list(range(877,885)):
+		states_dict[i] = "NM"
+	for i in range(100,150):
+		states_dict[i] = "NY"
+	for i in range(270,290):
+		states_dict[i] = "NC"
+	for i in range(580,589):
+		states_dict[i] = "ND"
+	for i in range(430,460):
+		states_dict[i] = "OH"
+	for i in [730,731] + list(range(734,742)) + list(range(743,750)):
+		states_dict[i] = "OK"
+	for i in range(970,980):
+		states_dict[i] = "OR"
+	for i in range(150,197):
+		states_dict[i] = "PA"
+	for i in range(290,300):
+		states_dict[i] = "SC"
+	for i in range(570,578):
+		states_dict[i] = "SD"
+	for i in range(370,386):
+		states_dict[i] = "TN"
+	for i in [733] + list(range(750,771)) + list(range(772,800)):
+		states_dict[i] = "TX"
+	for i in range(840,848):
+		states_dict[i] = "UT"
+	for i in [201] + list(range(220,248)):
+		states_dict[i] = "VA"
+	for i in range(247, 269):
+		states_dict[i] = "WV"
+	for i in list(range(980,987)) + list(range(988,995)):
+		states_dict[i] = "WA"
+	for i in [530,531,532] + [534,535] + list(range(537,550)):
+		states_dict[i] = "WI"
+	for i in list(range(820,832)) + [834]:
+		states_dict[i] = "WY"
+	states_dict = {str(key): value for key, value in states_dict.items()}
+	x += 1
+
+# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded in this scenario as their zip codes begin with 0.
+states_dict.update({
+	"060":"CT","061":"CT","062":"CT","063":"CT","064":"CT","065":"CT","066":"CT","067":"CT","068":"CT","069":"CT", #CT
+	"039":"ME","040":"ME","041":"ME","042":"ME","043":"ME","044":"ME","045":"ME","046":"ME","047":"ME","048":"ME","049":"ME", #ME
+	"010":"MA","011":"MA","012":"MA","013":"MA","014":"MA","015":"MA","016":"MA","017":"MA","018":"MA","019":"MA","020":"MA","021":"MA","022":"MA","023":"MA","024":"MA","025":"MA","026":"MA","027":"MA","055":"MA", #MA
+	"030":"NH","031":"NH","032":"NH","033":"NH","034":"NH","035":"NH","036":"NH","037":"NH","038":"NH", #NH
+	"070":"NJ","071":"NJ","072":"NJ","073":"NJ","074":"NJ","075":"NJ","076":"NJ","077":"NJ","078":"NJ","079":"NJ","080":"NJ","081":"NJ","082":"NJ","083":"NJ","084":"NJ","085":"NJ","086":"NJ","087":"NJ","088":"NJ","089":"NJ", #NJ
+	"005":"NY", #NY
+	"028":"RI","029":"RI", #RI
+	"050":"VT","051":"VT","052":"VT","053":"VT","054":"VT","056":"VT","057":"VT","058":"VT","059":"VT" #VT
+})
+
+# This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
+def zip3(z):
+    # safe 3-digit prefix with leading zeros preserved
+    s = str(z) if pd.notna(z) else ""
+    return s[:3].zfill(3)
+
+##Getting zip and looking it up in "states_dict" to identify na's
+df["state"] = df["zip"].map(states_dict).fillna("Unknown")
+
+#Dropping unknowns from "state" and assignment back to the data frame
+df = df[df["state"] != "Unknown"]
+
+#Dropping missing values from "year" and ensuring it is the correct data type
+years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int).tolist())
+default_year = int(min(years))
 
 #Create the layout
-layout = html.Div(
+app.layout = html.Div(
     id = "premium-page", className = "page premium-page",
     children=[
-        html.H1("Mean Premium per Policy", className="page-title"),
+        html.H1("Mean Premium per Policy by State", className="page-title"),
         html.Div(
             id="controls", className="controls",
             children=[
-                html.Label("Filter by State(s)", className="label"),
+                html.Label("Year", className="label"),
                 dcc.Dropdown(
-                    id="state-dropdown",
-                    options=[{"label": s, "value": s} for s in sorted(df["state"].unique())],
-                    value=None,
-                    placeholder="Select state(s)",
-                    multi=True,
+                    id="year-dropdown",
+                    options=[{"label": str(y), "value": int(y)} for y in years],
+                    value=default_year,
+                    placeholder="Select Year",
+                    multi=False,
                     clearable=True,
-                    className="dropdown"
+                    className="dropdown",
                 ),
-                
-                html.Div(className="my-3"),
-
-                html.Small(
+                 html.Div(className="my-3"),
+                 html.Small(
                     "Data source: .",
                     className="text-muted",
                     ),
-                html.Label("Year", className="label"),
-                dcc.RangeSlider(
-                    id="year-range",
-                    min=int(df["year"].min()),
-                    max=int(df["year"].max()),
-                    value=int(df["year"].min()),
-                    marks={str(y): str(y) for y in sorted(df["year"].unique())},
-                    step=None,
-                    tooltip={"placement": "bottom", "always_visible": True},
-                    className="range-slider"
-                ),
                 html.Br(),
                 dcc.Graph(id="premium-graph"),
             ],
@@ -56,33 +180,40 @@ layout = html.Div(
 ##Callbacks
 @callback(
     Output("premium-graph", "figure"),
-    Input("state-dropdown", "value"),
-    Input("year-range", "value"),
+    Input("year-dropdown", "value"),
 )
-#might need to edit below
-def update_graph(selected_states, selected_year):
-    d = df[
-        (df["state"].isin(selected_states)) &
-        (df["year"] == selected_year)
-    ]
-    grouped = (
-        d.groupby(["year", "state"], as_index=False)
-        .agg(mean_premium=("premium_per_policy", "mean"), n = ("premium_per_policy", "size"))
-        .sort_values(["state"])
-    )
-##can change chart type here (not sure if bar is best for this) - add hover data here?
-    fig = px.bar(grouped, x="year",
-                  y="mean_premium",
-                  color="state",
-                  markers=True,
-                  color_discrete_sequence=px.colors.qualitative.Safe,
-                  title=f"Mean Premium per Policy - {selected_year}",
-                  labels={"mean_premium": "Mean Premium ($)", "Year": "Year", "State": "State"}
-                  )
-    fig.update_layout(
-                      font_color="white",
-                      yaxis_title="USD",
-                      yaxis_tickprefix="$",
-                      xaxis_title="None",
-                      margin=dict(l=10, r=10, t=50, b=10))
-    return fig
+#Updating the graph for the Selected Year
+def update_graph(selected_year):
+	d = df[df["year"] == selected_year].copy()
+
+#Calculting the mean of Premium Per Policy and sorting by the values
+	grouped = (
+		d.groupby("state", as_index=False)
+		.agg(mean_premium=("premium_per_policy", "mean"), n = ("premium_per_policy", "size"))
+		.sort_values("mean_premium", ascending=False)
+	)
+	
+#Creating the Bar Chart
+	fig = px.bar(grouped, x="state", y="mean_premium",
+				  title=f"Mean Premium per Policy by State - ({selected_year})",
+				  labels={"mean_premium": "Mean Premium ($)", "state": "State"},
+				  hover_data={"n":True, "mean_premium": ":.2f"},
+				  color="mean_premium",
+				  color_continuous_scale="Viridis",
+				  )
+ 
+ #Updating the layout of the chart
+	fig.update_layout(
+					  yaxis_title="USD",
+					  xaxis_title="States",
+					  margin=dict(l=0, r=0, t=50, b=0))
+	
+ #Updating the formatting of the y-axis
+	fig.update_yaxes(ticketprefix="$", tickformat=",.0f")
+ 
+ #Obtaining the chart
+	return fig
+
+# For local testing
+if __name__ == "__main__":
+	app.run(debug=True)
