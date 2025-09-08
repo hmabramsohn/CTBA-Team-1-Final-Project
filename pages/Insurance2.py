@@ -1,17 +1,24 @@
+# Harrison Abramsohn
+
 # This page will construct a U.S.-based map displaying property insurance loss ratio as a function of zip code.
 # Loss ratios will be displayed on a color scale. Loss rations of over >=100%, indicating a financial loss, will be uniform on a separate, striking color.
 # The map will be adjustable by year.
 # The map may be adjustable between displaying zip codes vs states. 
 
+# NEEDS
+# Add error handling to functions
+# Requirements.txt
+
 # Libraries
 import pandas as pd
-from dash import Input, Output, callback, html, dcc, Dash
+from dash import Input, Output, callback, html, dcc, Dash, dash
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import plotly.express as px
 
 # For local testing
 app = Dash(__name__)
+dash.register_page(__name__)
 
 # Raw dataset
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
@@ -179,7 +186,8 @@ def mapSet(mapYearSlider, mapToggle):
 			locations = "State",
 			locationmode = "USA-states",
 			color = "Loss Ratio",
-			scope = "usa"
+			scope = "usa",
+			title = f"Map of US States Colored by Mean Loss Ratio for year {mapYearSlider}"
 			)
 	else:
 		setUseYearState["Over100"] = setUseYearState["Loss Ratio"] > 1
@@ -188,7 +196,8 @@ def mapSet(mapYearSlider, mapToggle):
 			locations = "State",
 			locationmode = "USA-states",
 			color = "Over100",
-			scope = "usa"
+			scope = "usa",
+			title = f"Map Displaying States where Insurers Lost Money (Loss Ration >100%) for year {mapYearSlider}"
 		)
 	mapDisplay.update_layout(margin=dict(l=0, r=0, t=40, b=0))
 	return mapDisplay
@@ -199,5 +208,5 @@ if __name__ == "__main__":
 
 # Function: 
 # If mapYearSlider == Year, display that year
-# if mapToggle == False, display zip code map;
-# else display states map
+# if mapToggle == False, display relative scale map;
+# else over 100% map

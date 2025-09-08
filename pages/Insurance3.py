@@ -1,11 +1,11 @@
 #Importing Libraries
-from dash import html, dcc, Input, Output, callback, register_page
+from dash import html, dcc, Input, Output, callback, register_page, dash
 import pandas as pd
 import plotly.express as px
 from pathlib import Path
 
-register_page(__name__, path='/Insurance3', name='Premium per Policy (Mean)')
-
+dash.register_page(__name__)
+ 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "InsuranceData.csv"
 
 df = pd.read_csv(DATA_PATH)
