@@ -10,16 +10,24 @@ app = Dash(__name__)
 register_page(__name__)
 
 # Raw dataset
-insurance = pd.read_excel("Insurance/data/InsuranceData.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
+insurance = pd.read_excel("Insurance/data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
 
-# Normalize column names
-df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy"]].rename(
+# Create dataframe
+df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile Grouping"]].rename(
     columns={
         "ZIP Code": "zip",
         "Year": "year",
         "Premiums Per Policy": "premium_per_policy",
+        "Policy Decile Grouping": "policy_decile_grouping",
     }
 )
+
+# Make a numeric decile column once so filtering is fast/clean
+df["decile"] = pd.to_numeric(df["policy_decile_grouping"], errors="coerce").astype(int) 
+
+# Build slider domain & default
+deciles = sorted(df["decile"].dropna().unique().astype(int))
+default_decile = int(min(deciles))
 
 # ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 
@@ -132,19 +140,26 @@ states_dict.update({
 })
 
 # This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
-def zip3(z):
-    # safe 3-digit prefix with leading zeros preserved
-    s = str(z) if pd.notna(z) else ""
-    return s[:3].zfill(3)
+def cutter(zipCode):
+	zipCode = str(zipCode[0:3])
+	return zipCode
 
-##Getting zip and looking it up in "states_dict" to identify na's
-df["state"] = df["zip"].map(states_dict).fillna("Unknown")
+# This function ...
+def assign(zipCode):
+	try:
+		zipCode = cutter(zipCode)
+		state = states_dict[zipCode]
+		return state
+	except:
+		return None
+
+df["state"] = [assign(x) for x in df['zip']]
 
 #Dropping unknowns from "state" and assignment back to the data frame
 df = df[df["state"] != "Unknown"]
 
 #Dropping missing values from "year" and ensuring it is the correct data type
-years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int).tolist())
+years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int))
 default_year = int(min(years))
 
 #Create the layout
@@ -155,7 +170,7 @@ app.layout = html.Div(
         html.Div(
             id="controls", className="controls",
             children=[
-                html.Label("Year", className="label"),
+                html.Label("Year", className="label", style={"marginBottom": "30px"}),
                 dcc.Dropdown(
                     id="year-dropdown",
                     options=[{"label": str(y), "value": int(y)} for y in years],
@@ -165,13 +180,29 @@ app.layout = html.Div(
                     clearable=True,
                     className="dropdown",
                 ),
-                 html.Div(className="my-3"),
+                html.Br(),
+                
+                html.Label("Policy Decile Grouping", className="slider", style={"marginBottom": "20px"}),
+                dcc.Slider(
+                    id="decile-slider",
+                    min=int(min(deciles)),
+                    max=int(max(deciles)),
+                    step=None,
+                    value=default_decile,
+                    marks={int(d): str(int(d)) for d in deciles},
+                    tooltip={"placement": "bottom", "always_visible": False},
+                    ),
+                
+                html.Div(className="my-3"),
+                
+                dcc.Graph(id="premium-graph"),
+                
+                html.Div(className="my-3"),
+                
                  html.Small(
                     "Data source: .",
                     className="text-muted",
                     ),
-                html.Br(),
-                dcc.Graph(id="premium-graph"),
             ],
         ),
     ],
@@ -181,37 +212,46 @@ app.layout = html.Div(
 @callback(
     Output("premium-graph", "figure"),
     Input("year-dropdown", "value"),
+    Input("decile-slider", "value")
 )
 #Updating the graph for the Selected Year
-def update_graph(selected_year):
-	d = df[df["year"] == selected_year].copy()
+def update_graph(selected_year, selected_decile):
+	y = selected_year if selected_year is not None else default_year
+	z = selected_decile if selected_decile is not None else default_decile
 
-#Calculting the mean of Premium Per Policy and sorting by the values
+	# Filter to year + decile
+	d = df[(df["year"] == y) & (df["decile"] == z)].copy()
+
+	# Calculating the mean of Premium Per Policy and sorting by the values
 	grouped = (
 		d.groupby("state", as_index=False)
-		.agg(mean_premium=("premium_per_policy", "mean"), n = ("premium_per_policy", "size"))
+		.agg(mean_premium=("premium_per_policy", "mean"), n=("premium_per_policy", "size"))
 		.sort_values("mean_premium", ascending=False)
 	)
-	
-#Creating the Bar Chart
-	fig = px.bar(grouped, x="state", y="mean_premium",
-				  title=f"Mean Premium per Policy by State - ({selected_year})",
-				  labels={"mean_premium": "Mean Premium ($)", "state": "State"},
-				  hover_data={"n":True, "mean_premium": ":.2f"},
-				  color="mean_premium",
-				  color_continuous_scale="Viridis",
-				  )
- 
- #Updating the layout of the chart
+
+	# Creating the Bar Chart
+	fig = px.bar(
+		grouped,
+		x="state",
+		y="mean_premium",
+		title=f"Mean Premium per Policy by State  — Year {y}, Decile {z}",
+		labels={"mean_premium": "Mean Premium ($)", "state": "State"},
+		hover_data={"n": True, "mean_premium": ":.2f"},
+		color="mean_premium",
+		color_continuous_scale="Viridis",
+	)
+
+	# Updating the layout of the chart
 	fig.update_layout(
-					  yaxis_title="USD",
-					  xaxis_title="States",
-					  margin=dict(l=0, r=0, t=50, b=0))
-	
- #Updating the formatting of the y-axis
-	fig.update_yaxes(ticketprefix="$", tickformat=",.0f")
- 
- #Obtaining the chart
+		yaxis_title="USD",
+		xaxis_title="States",
+		margin=dict(l=0, r=0, t=50, b=0)
+	)
+
+	# Updating the formatting of the y-axis
+	fig.update_yaxes(tickprefix="$", tickformat=",.0f")
+
+	# Obtaining the chart
 	return fig
 
 # For local testing
