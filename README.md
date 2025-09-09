@@ -17,7 +17,7 @@ Paid Loss Ratio: The amount insurers have paid on claims to or on behalf of poli
 
 Premium Per Policy: The average cost of a policy.  Premiums may be related to a number of factors, such as climate-related risk, inflation, costs of reconstruction, and reinsurance, as discussed in Section III.B.(directly dfrom data source)
 
-    Policy decile grouping: ranking insurance. Breaks up the policy into 10 groups (in our data) therfore each decile will have 10% of the data. 1st decile contains the policy hodler with the lowest risk profile and 10th decile contains the policy holder with the highest risk profile. 
+Policy decile grouping: ranking insurance. Breaks up the policy into 10 groups (in our data) therfore each decile will have 10% of the data. 1st decile contains the policy hodler with the lowest risk profile and 10th decile contains the policy holder with the highest risk profile. 
 
 
 List all of the packages used: 
@@ -40,6 +40,7 @@ used in the callbacks for updated the graph for selected year and selected decil
 used for calculating the mean for premium per policy
 used to filter year and decile
 used to find fig.update_yaxes
+
 
 
 
