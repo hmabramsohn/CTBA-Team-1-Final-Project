@@ -194,7 +194,7 @@ def mapSet(mapYearSlider, mapToggle):
 			scope = "usa",
 			title = f"Map of US States Colored by Mean Loss Ratio for year {mapYearSlider}",
    			color_continuous_scale="hot_r",
-			range_color=(0, 100)
+			range_color=(0, 150)
 			)
 	else:
 		setUseYearState["Financial Loss"] = setUseYearState["Loss Ratio"] > 100
