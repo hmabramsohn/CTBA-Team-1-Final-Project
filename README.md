@@ -1,7 +1,7 @@
 ﻿# CTBA-Team-1-Final-Project
 
 Project Overview: 
-    This project is a multipage dash website that looks at data about property insurance between 2018-2022. We are specifically looking at loss ratios, premiums per policy, and policy decile grouping. We do this through the use of a map showing loss ratios between states and a bar graph which looks at mean premium per policy by state. There are a variety of factors that go into evaluating insurance. Although this is a challenge for insurance professionals, the benefit of this type of data is that is breaks down any potential problems by state. Breaking this down by state saves the insurance companies time and money, it is efficient. This content is geared toward a potential insurance executive. This data would help an insurance professional strategize, analyze and develop better suited plans for deploying insurance. This is valuable becuase it might help insurance companies in evaluating which states are most profitable and how to target them. 
+    This project is a multipage dash website that looks at data about property insurance between 2018-2022. We are specifically looking at loss ratios, premiums per policy, and policy decile grouping. We do this through the use of a map comparing loss ratios between states and a bar graph which looks at mean premium per policy by state. There are a variety of factors that go into evaluating insurance. Grouping summary statistics by state helps insurance professionals to strategize, analyze and develop better suited business plans. These maps can help insurance companies evauluate which states are most profitable and, if combined with a hitorical analysis, derive some factors of large-scale profitability. 
 
 How to run it:
 
