@@ -6,9 +6,6 @@ Project Overview:
 How to run it: Local & Deploy Notes: VS Code
 All code should run through the InsuranceApp.py and create a link to our website in the terminal.
 
-How to run it: Local & Deploy Notes: Render 
-All pages should be connected to an external URL. No additional running is needed. 
-
 Data Sources & Data Dictionary: (explain what your variables and why you chose them)
 The data source is labeled: "Supporting Underlying Metrics and Disclaimer for Analyses of US Homeowners Insurance Markets 2018-20". It is the only data source that we used in this multipage dash website. The variables we used are: Paid Loss ratio, premium per policy, policy decile grouping, zip code and year. Below are definitions of the variables: 
     
@@ -37,4 +34,5 @@ used for debugging and checking errors
 used in the callbacks for updated the graph for selected year and selected decile 
 used for calculating the mean for premium per policy
 used to filter year and decile
+
 used to find fig.update_yaxes
