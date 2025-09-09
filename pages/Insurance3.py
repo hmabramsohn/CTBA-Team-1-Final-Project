@@ -157,7 +157,7 @@ layout = html.Div(
     id = "premium-page", className = "page premium-page",
     children=[
         html.H1("Mean Premium per Policy by State from 2018-2022", className="page-title", style={'textAlign': 'center'),
-        html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the Mean Premium per Policy for each State in the US that can be filtered by Year and Decile Grouping. The first decile contains the policies with the highest risk profile, and the tenth decile contains the policies with the highest risk profile."),
+        html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the Mean Premium per Policy for each State in the US that can be filtered by Year and Decile Grouping. The first decile contains the policies with the lowest risk profile, and the tenth decile contains the policies with the highest risk profile."),
         html.Div(
             #Define input values
             id="controls", className="controls",
@@ -250,6 +250,7 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
 
 
 
