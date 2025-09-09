@@ -9,10 +9,9 @@ server = app.server  # Expose the server variable for deployments
 app.layout = html.Div([ 
     dbc.NavbarSimple(
         children= [ 
-            dbc.NavLink("Home", href="/", active= "exact"),
-            dbc.NavLink("Insurance Map", href="/Insurance1", active= "exact"),
-            dbc.NavLink("Insurance Graph", href="/Insurance2", active= "exact"),
-            dbc.NavLink("Optional Page 3", href="/Insurance3", active= "exact"),
+            dbc.NavLink("Home", href="/Insurance1", active= "exact"),
+            dbc.NavLink("Insurance Map", href="/Insurance2", active= "exact"),
+            dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact"),
         ], 
         brand = "Insurance App"),
     dash.page_container
