@@ -190,6 +190,7 @@ def mapSet(mapYearSlider, mapToggle):
 			scope = "usa",
 			title = f"Map of US States Colored by Mean Loss Ratio in {mapYearSlider}",
    			color_continuous_scale="hot_r",
+			# Setting range to increase visibility of mid-range differences
 			range_color=[30, 150]
 			)
 	else:
