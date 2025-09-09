@@ -18,14 +18,16 @@ import plotly.express as px
 
 # For local testing
 app = Dash(__name__)
-dash.register_page(__name__)
+#dash.register_page(__name__)
 
 # Raw dataset
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
 
 # Useable datasets
 # years for date selection
-years = pd.DataFrame(insurance['Year'].unique())
+years = insurance['Year'].unique()
+years = [str(year) for year in years]
+
 # filtered setUse for useful variables
 setUse = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
 
@@ -156,16 +158,18 @@ setUse["State"] = [assign(x) for x in setUse['ZIP Code']]
 
 # Page Layout
 app.layout =  html.Div([
-    html.H1("Placeholder Title"),
-    html.P("Placeholder Text"),
+    html.H1("Mean Loss Ratio for Property Insurers per State From 2018-2022"),
+    html.P(
+        "Loss ratio is a financial indicator used by insurance companies comparing the amount earned in premiums to the amount paid out in claims. The first map shows the mean loss ratio by state for visual comparison between 2018-2022. The second map highlights states where property insurers paid out more in claims than they collected in premiums. Insurers, on average, lost money in these states."
+        ),
     html.Div([
         # Define input values
         dcc.Slider(id="mapYearSlider", className="slider",
-                   min=int(years.iloc[0]),
-                   max=int(years.iloc[-1]),
+                   min=int(years[0]),
+                   max=int(years[-1]),
                    step=None,
-				   value=int(years.iloc[0]),
-                   marks={year: str(year) for year in years}),
+				   value=int(years[0]),
+                   marks={year: year for year in years}),
         # Default False
         daq.ToggleSwitch(id="mapToggle", className="toggle", vertical=True, value=False),
         dcc.Graph(id="mapDisplay")
@@ -180,6 +184,7 @@ app.layout =  html.Div([
 )
 def mapSet(mapYearSlider, mapToggle):
 	setUseYearState = setUse[setUse['Year'] == mapYearSlider].groupby("State").mean("Loss Ratio").reset_index()
+	setUseYearState["Loss Ratio"] = setUseYearState["Loss Ratio"] * 100
 	if mapToggle == False:
 		mapDisplay = px.choropleth(
 			setUseYearState,
@@ -187,17 +192,20 @@ def mapSet(mapYearSlider, mapToggle):
 			locationmode = "USA-states",
 			color = "Loss Ratio",
 			scope = "usa",
-			title = f"Map of US States Colored by Mean Loss Ratio for year {mapYearSlider}"
+			title = f"Map of US States Colored by Mean Loss Ratio for year {mapYearSlider}",
+   			color_continuous_scale="hot_r",
+			range_color=(0, 100)
 			)
 	else:
-		setUseYearState["Over100"] = setUseYearState["Loss Ratio"] > 1
+		setUseYearState["Financial Loss"] = setUseYearState["Loss Ratio"] > 100
 		mapDisplay = px.choropleth(
 			setUseYearState,
 			locations = "State",
 			locationmode = "USA-states",
-			color = "Over100",
+			color = "Financial Loss",
 			scope = "usa",
-			title = f"Map Displaying States where Insurers Lost Money (Loss Ration >100%) for year {mapYearSlider}"
+			title = f"Map Displaying States where Insurers Lost Money (Loss Ratio >100%) for Year {mapYearSlider}",
+			color_continuous_scale="hot_r",
 		)
 	mapDisplay.update_layout(margin=dict(l=0, r=0, t=40, b=0))
 	return mapDisplay
