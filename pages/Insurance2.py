@@ -15,10 +15,11 @@ from dash import Input, Output, callback, html, dcc, Dash, dash
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import plotly.express as px
+import dash_labs
 
 # For local testing
-app = Dash(__name__)
-#dash.register_page(__name__)
+#app = Dash(__name__)
+dash_labs.plugins.register_page(__name__, path="/Insurance2")
 
 # Raw dataset
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
@@ -163,7 +164,7 @@ setUse = setUse[setUse["State"] != "Unknown"]
 
 
 # Page Layout
-app.layout =  html.Div([
+layout =  html.Div([
     html.H1("Mean Loss Ratio for Property Insurers per State From 2018-2022"),
     html.P(
         "Loss ratio is a financial indicator used by insurance companies comparing the amount earned in premiums to the amount paid out in claims. The first map shows the mean loss ratio by state for visual comparison between 2018-2022. The second map highlights states where property insurers paid out more in claims than they collected in premiums. Insurers, on average, lost money in these states."
@@ -217,8 +218,8 @@ def mapSet(mapYearSlider, mapToggle):
 	return mapDisplay
 
 # For local testing
-if __name__ == "__main__":
-	app.run(debug=True)
+#if __name__ == "__main__":
+#	app.run(debug=True)
 
 # Function: 
 # If mapYearSlider == Year, display that year
