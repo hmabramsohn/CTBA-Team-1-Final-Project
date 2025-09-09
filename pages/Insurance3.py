@@ -200,10 +200,13 @@ layout = html.Div(
                 
                 html.Div(className="my-3"),
                 
-                 html.Small(
-                    "Data source: .",
-                    className="text-muted",
-                    ),
+                html.Div([
+					html.A("Data Source", 
+						   href="https://home.treasury.gov/news/press-releases/jy2791",
+						   target="_blank",
+						   style={'textAlign': 'center', 'display': 'block', 'marginTop': '20px'}),
+				  ],
+				  ),
             ],
         ),
     ],
@@ -254,3 +257,4 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
