@@ -1,4 +1,7 @@
-#This page contains code to 
+#This page will construct a Bar Chart displaying the Mean Premium Per Policy as a function of zipcode (state).
+ #Mean Premium per Polciy will be displayed decendingly on a color scale by state.
+ #The graph will be adjustable by year as well as by policy type (decile grouping)
+  
 
 #Importing Libraries
 from dash import Dash, html, dcc, Input, Output, callback, register_page
@@ -22,12 +25,12 @@ df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile
     }
 )
 
-# Make a numeric decile column once so filtering is fast/clean
+# Make a numeric decile conversion and cleaning 
 df["decile"] = pd.to_numeric(df["policy_decile_grouping"], errors="coerce").astype(int) 
-
-# Build slider domain & default
 deciles = sorted(df["decile"].dropna().unique().astype(int))
-default_decile = int(min(deciles))
+
+#Making a numeric year conversion and cleaning
+years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int))
 
 # ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 
@@ -144,7 +147,7 @@ def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
 	return zipCode
 
-# This function ...
+# This function assigns the cut zip code to a state in states_dict and error checks
 def assign(zipCode):
 	try:
 		zipCode = cutter(zipCode)
@@ -153,44 +156,46 @@ def assign(zipCode):
 	except:
 		return None
 
+#Applying to df
 df["state"] = [assign(x) for x in df['zip']]
 
 #Dropping unknowns from "state" and assignment back to the data frame
 df = df[df["state"] != "Unknown"]
-
-#Dropping missing values from "year" and ensuring it is the correct data type
-years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int))
-default_year = int(min(years))
 
 #Create the layout
 app.layout = html.Div(
     id = "premium-page", className = "page premium-page",
     children=[
         html.H1("Mean Premium per Policy by State", className="page-title"),
+        html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the mean premium per policy for each state in the US that can be filtered by year and decile grouping."),
         html.Div(
+            #Define input values
             id="controls", className="controls",
             children=[
-                html.Label("Year", className="label", style={"marginBottom": "30px"}),
-                dcc.Dropdown(
-                    id="year-dropdown",
-                    options=[{"label": str(y), "value": int(y)} for y in years],
-                    value=default_year,
-                    placeholder="Select Year",
-                    multi=False,
-                    clearable=True,
-                    className="dropdown",
+                html.Label("Year", className="label"),
+                dcc.Slider(
+                    id="year-slider",
+                    className="slider",
+                    min=int(min(years)),
+                    max=int(max(years)),
+                    step=None,
+                    value=int(min(years)),
+                    marks={int(y): str(int(y)) for y in years},
+                    tooltip={"placement": "bottom", "always_visible": False},
+                    style={"marginBottom": "50px"},
                 ),
                 html.Br(),
                 
-                html.Label("Policy Decile Grouping", className="slider", style={"marginBottom": "20px"}),
-                dcc.Slider(
-                    id="decile-slider",
-                    min=int(min(deciles)),
-                    max=int(max(deciles)),
-                    step=None,
-                    value=default_decile,
-                    marks={int(d): str(int(d)) for d in deciles},
-                    tooltip={"placement": "bottom", "always_visible": False},
+                html.Label("Policy Decile Grouping", className="label"),
+                dcc.Dropdown(
+                    id="decile-dropdown",
+                    options= [{"label": str(d), "value": int(d)} for d in deciles],
+                    value=int(min(deciles)),
+                    placeholder="Select Decile Grouping",
+                    multi=False,
+                    clearable=True,
+                    className="dropdown",
+                    style={"marginBottom": "50px"},
                     ),
                 
                 html.Div(className="my-3"),
@@ -208,16 +213,16 @@ app.layout = html.Div(
     ],
 )
 
-##Callbacks
+##Callbacks: Year slider, Decile dropdown
 @callback(
     Output("premium-graph", "figure"),
-    Input("year-dropdown", "value"),
-    Input("decile-slider", "value")
+    Input("year-slider", "value"),
+    Input("decile-dropdown", "value")
 )
 #Updating the graph for the Selected Year
 def update_graph(selected_year, selected_decile):
-	y = selected_year if selected_year is not None else default_year
-	z = selected_decile if selected_decile is not None else default_decile
+	y = selected_year if selected_year is not None else int(min(years))
+	z = selected_decile if selected_decile is not None else int(min(deciles))
 
 	# Filter to year + decile
 	d = df[(df["year"] == y) & (df["decile"] == z)].copy()
