@@ -1,6 +1,6 @@
 #This page will construct a Bar Chart displaying the Mean Premium Per Policy as a function of zipcode (state).
- #Mean Premium per Polciy will be displayed decendingly on a color scale by state.
- #The graph will be adjustable by year as well as by policy type (decile grouping)
+ #Mean Premium per Policy will be displayed descendingly on a color scale by state.
+ #The graph will be adjustable by year as well as by policy type (decile grouping).
 
 #Importing Libraries
 from dash import Dash, html, dcc, Input, Output, callback, register_page
@@ -15,7 +15,6 @@ insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_n
 
 # Filter for useful variables
 insurance = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile Grouping"]]
-
 
 # Make a numeric decile conversion and cleaning 
 insurance["Policy Decile Grouping"] = pd.to_numeric(insurance["Policy Decile Grouping"], errors="coerce").astype(int) 
@@ -138,7 +137,7 @@ def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
 	return zipCode
 
-# This helper function assigns the cut zip code to a state in states_dict.
+# This helper function assigns the cut zip code to a state in states_dict and error checks
 def assign(zipCode):
 	try:
 		zipCode = cutter(zipCode)
@@ -216,7 +215,7 @@ def update_graph(selected_year, selected_decile):
 	y = selected_year if selected_year is not None else int(min(years))
 	z = selected_decile if selected_decile is not None else int(min(deciles))
 
-	# Filter to year + decile
+	# Filter to year + decile - Used AI for formatting of this code to filter
 	d = insurance[(insurance["Year"] == y) & (insurance["Policy Decile Grouping"] == z)].copy()
 
 	# Calculating the mean of Premium Per Policy and sorting by the values - Used AI to create the .agg function
@@ -251,5 +250,6 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
 
 
