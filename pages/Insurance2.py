@@ -166,7 +166,7 @@ layout =  html.Div([
         html.Div(className="wrap", children=
         [
         dcc.Graph(id="mapDisplay"),
-        html.P("Toggle between maps for relative loss scale and financial loss:", className="toggle"),
+        html.P("Toggle between maps for relative loss ratio and financial loss:", className="toggle"),
         daq.ToggleSwitch(id="mapToggle",className="toggle", vertical=False, value=False)
 		])
     ])
