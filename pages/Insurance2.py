@@ -150,7 +150,7 @@ insurance = insurance[insurance["State"] != "Unknown"]
 
 # Page Layout
 layout =  html.Div([
-    html.H1("Mean Loss Ratio for Property Insurers per State From 2018-2022"),
+    html.H1("Mean Loss Ratio for Property Insurers per State From 2018-2022", style={'textAlign': 'center'),
     html.P(
         "Loss ratio is a financial indicator used by insurance companies comparing the amount earned in premiums to the amount paid out in claims. The first map shows the mean loss ratio by state for visual comparison between 2018-2022. The second map highlights states where property insurers paid out more in claims than they collected in premiums. Insurers, on average, lost money in these states."
         ),
