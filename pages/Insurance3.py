@@ -7,10 +7,7 @@
 from dash import Dash, html, dcc, Input, Output, callback, register_page
 import pandas as pd
 import plotly.express as px
-#import dash_labs
 
-# For local testing
-#app = Dash(__name__)
 register_page(__name__, path="/Insurance3")
 
 # Raw dataset
@@ -242,7 +239,7 @@ def update_graph(selected_year, selected_decile):
 		labels={"mean_premium": "Mean Premium ($)", "state": "State"},
 		hover_data={"n": True, "mean_premium": ":.2f"},
 		color="mean_premium",
-		color_continuous_scale="Viridis",
+		color_continuous_scale="hot_r",
 	)
 
 	# Updating the layout of the chart
@@ -257,7 +254,3 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
-
-# For local testing
-#if __name__ == "__main__":
-#	app.run(debug=True)

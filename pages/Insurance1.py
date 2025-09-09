@@ -1,6 +1,5 @@
 import dash 
 from dash import html, dcc, Input, Output, callback, no_update, register_page
-#import dash_labs
 
 # Ethiana Hacsh 
 
@@ -28,11 +27,4 @@ def navigate(btn1, btn2):
         return "/Insurance3"
     btn1 = 0
     btn2 = 0
-   # else:
-    #    return no_update #AI used on 9/8/2025 # keeping the page stable if no action is needed. Nothing clicked and URL is not changed. Tells Dash to keep the current value
-        
-
-# compare with hers on github
-
-# add any AI assistnace comment block in code
 

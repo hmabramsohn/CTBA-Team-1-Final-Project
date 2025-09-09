@@ -15,10 +15,7 @@ from dash import Input, Output, callback, html, dcc, Dash, register_page
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import plotly.express as px
-import dash_labs
 
-# For local testing
-#app = Dash(__name__)
 register_page(__name__, path="/Insurance2")
 
 # Raw dataset
@@ -216,12 +213,3 @@ def mapSet(mapYearSlider, mapToggle):
 		)
 	mapDisplay.update_layout(margin=dict(l=0, r=0, t=40, b=0))
 	return mapDisplay
-
-# For local testing
-#if __name__ == "__main__":
-#	app.run(debug=True)
-
-# Function: 
-# If mapYearSlider == Year, display that year
-# if mapToggle == False, display relative scale map;
-# else over 100% map
