@@ -154,9 +154,9 @@ insurance = insurance[insurance["State"] != "Unknown"]
 
 #Create the layout
 layout = html.Div(
-    id = "premium-page", className = "page premium-page",
+    className = "wrap",
     children=[
-        html.H1("Mean Premium per Policy by State from 2018-2022", className="page-title"),
+        html.H1("Mean Premium per Policy by State from 2018-2022"),
         html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the Mean Premium per Policy for each State in the US that can be filtered by Year and Decile Grouping. The first decile contains the policies with the lowest risk profile, and the tenth decile contains the policies with the highest risk profile."),
         html.Div(
             #Define input values
@@ -186,17 +186,18 @@ layout = html.Div(
                     className="dropdown",
                     ),
                 
-                html.Div(className="my-3"),
+                html.Div(),
                 
                 dcc.Graph(id="premium-graph"),
                 
-                html.Div(className="my-3"),
+                html.Div(),
                 
                 html.Div([
 					html.A("Data Source", 
-						   href="https://home.treasury.gov/news/press-releases/jy2791",
-						   target="_blank")
-				  ],
+							href="https://home.treasury.gov/news/press-releases/jy2791",
+							target="_blank"
+        					)
+				  ], id="dataSource"
 				  ),
             ],
         ),

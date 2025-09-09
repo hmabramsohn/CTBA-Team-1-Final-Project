@@ -163,11 +163,11 @@ layout =  html.Div([
 				   value=int(years[0]),
                    marks={year: year for year in years}),
         # Default False
-        html.Div(id="wrap", children=
+        html.Div(className="wrap", children=
         [
         dcc.Graph(id="mapDisplay"),
-        html.P("Toggle between maps for relative loss scale and financial loss:", id="toggleText"),
-        daq.ToggleSwitch(id="mapToggle", className="toggle", vertical=False, value=False)
+        html.P("Toggle between maps for relative loss scale and financial loss:", className="toggle"),
+        daq.ToggleSwitch(id="mapToggle",className="toggle", vertical=False, value=False)
 		])
     ])
 ])
@@ -190,7 +190,7 @@ def mapSet(mapYearSlider, mapToggle):
 			scope = "usa",
 			title = f"Map of US States Colored by Mean Loss Ratio in {mapYearSlider}",
    			color_continuous_scale="hot_r",
-			range_color=(0, 150)
+			range_color=[30, 150]
 			)
 	else:
 		insuranceYear["Financial Loss"] = insuranceYear["Loss Ratio"] > 100

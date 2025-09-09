@@ -17,7 +17,6 @@ header {
 }
 
 a {
-    display: inline-block;
     margin: 16px;
     padding: 10px 20px;
     border-radius: 5px;
@@ -53,8 +52,6 @@ h1, h2, h3 {
     font-weight: 600;
     text-align: center;
     margin: 50px 300px;
-}
-h1, h2, h3 {
     font-size: 2.5rem;
 }
 
@@ -62,25 +59,39 @@ p {
     margin: 50px 300px;
 }
 
-p #toggleText {
-    margin: 0;
-    padding: 0
-}
-
-#NavBar {
-    text-align: center;
-}
-
 .navbar-toggler {
     visibility: hidden;
 }
 
-/* toggle switch */
-#mapToggle {
-    float:right;
-    margin: 0
+.wrap {
+    display:flexbox;
+    text-align: left;
+    justify-content: center;
 }
 
-#wrap {
-    display:grid
+@media only screen and (max-width: 800px) {
+    p, h1, h2, h3 {
+        margin: 50px 50px;
+        text-align: left;
+    }
+    .navitem {
+        display:inline-block
+    }
+    p.toggle {
+        margin-top: 20px
+    }
+    .toggle {
+        margin: 0;
+        padding: 0 
+    }
+}
+
+#decile-dropdown {
+    margin: 10px
+}
+
+#dataSource {
+    display:flex;
+    margin-top: 30px;
+    justify-content: center
 }

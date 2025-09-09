@@ -4,10 +4,7 @@ Project Overview:
     This project is a multipage dash website that looks at data about property insurance between 2018-2022. We are specifically looking at loss ratios, premiums per policy, and policy decile grouping. We do this through the use of a map showing loss ratios between states and a bar graph which looks at mean premium per policy by state. There are a variety of factors that go into evaluating insurance. Although this is a challenge for insurance professionals, the benefit of this type of data is that is breaks down any potential problems by state. Breaking this down by state saves the insurance companies time and money, it is efficient. This content is geared toward a potential insurance executive. This data would help an insurance professional strategize, analyze and develop better suited plans for deploying insurance. This is valuable becuase it might help insurance companies in evaluating which states are most profitable and how to target them. 
 
 How to run it: Local & Deploy Notes: VS Code
-All code should run through the InsuranceApp.py and create a link to our website in the terminal.
-
-How to run it: Local & Deploy Notes: Render 
-All pages should be connected to an external URL. No additional running is needed. 
+Run InsuranceApp.py after installing all required packages. Access the local site through the terminal.
 
 Data Sources & Data Dictionary: (explain what your variables and why you chose them)
 The data source is labeled: "Supporting Underlying Metrics and Disclaimer for Analyses of US Homeowners Insurance Markets 2018-20". It is the only data source that we used in this multipage dash website. The variables we used are: Paid Loss ratio, premium per policy, policy decile grouping, zip code and year. Below are definitions of the variables: 

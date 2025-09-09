@@ -8,16 +8,14 @@ server = app.server  # Expose the server variable for deployments
 
 app.layout = html.Div([ 
     dbc.NavbarSimple(
-        fluid = True,
-        id = "NavBar",
+        className= "NavBar",
         children= [ 
-            dbc.NavLink("Home", href="/", active= "exact"),
-            dbc.NavLink("Insurance Map", href="/Insurance2", active= "exact"),
-            dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact")
-        ]), 
-    #brand = "Insurance App"),
+            dbc.NavLink("Home", href="/", active= "exact", className="navitem"),
+            dbc.NavLink("Insurance Map", href="/Insurance2", active= "exact", className="navitem"),
+            dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact", className="navitem")
+        ]),
     dash.page_container
-])
+], id="navigation")
 
 if __name__ == "__main__":
     app.run(debug=True)
