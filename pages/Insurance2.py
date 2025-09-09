@@ -1,15 +1,8 @@
 # Harrison Abramsohn
 
-# This page will construct a U.S.-based map displaying property insurance loss ratio as a function of zip code.
-# Loss ratios will be displayed on a color scale. Loss rations of over >=100%, indicating a financial loss, will be uniform on a separate, striking color.
-# The map will be adjustable by year.
-# The map may be adjustable between displaying zip codes vs states. 
+# This page 
 
-# NEEDS
-# Add error handling to functions
-# Requirements.txt
-
-# Libraries
+# Import Libraries
 import pandas as pd
 from dash import Input, Output, callback, html, dcc, Dash, register_page
 import dash_bootstrap_components as dbc
@@ -18,22 +11,20 @@ import plotly.express as px
 
 register_page(__name__, path="/Insurance2")
 
-# Raw dataset
+# Datasets
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
 
-# Useable datasets
-# years for date selection
+# Creating years for date selection
 years = insurance['Year'].unique()
 years = [str(year) for year in years]
 
-# filtered setUse for useful variables
-setUse = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
+# Filtering for useful variables
+insurance = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
 
-# ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
-
-# Creating a dictionary to later assign to our DataFrame.
+# Creating a dictionary for Z code to state assignment
+# ZIP code mapping taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 states_dict = {}
-# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except some exceptions.
+# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except the northeast.
 x = 0
 while x < 1:
 	for i in list(range(350,353)) + list(range(354,370)):
@@ -127,7 +118,7 @@ while x < 1:
 	states_dict = {str(key): value for key, value in states_dict.items()}
 	x += 1
 
-# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded in this scenario as their zip codes begin with 0.
+# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded as their zip codes begin with 0 and don't work with the range() function.
 states_dict.update({
 	"060":"CT","061":"CT","062":"CT","063":"CT","064":"CT","065":"CT","066":"CT","067":"CT","068":"CT","069":"CT", #CT
 	"039":"ME","040":"ME","041":"ME","042":"ME","043":"ME","044":"ME","045":"ME","046":"ME","047":"ME","048":"ME","049":"ME", #ME
@@ -139,13 +130,12 @@ states_dict.update({
 	"050":"VT","051":"VT","052":"VT","053":"VT","054":"VT","056":"VT","057":"VT","058":"VT","059":"VT" #VT
 })
 
-
-# This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
+# This helper function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
 def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
 	return zipCode
 
-# This function assigns the cut zip code to a state in states_dict.
+# This helper function assigns the cut zip code to a state in states_dict.
 def assign(zipCode):
 	try:
 		zipCode = cutter(zipCode)
@@ -155,9 +145,9 @@ def assign(zipCode):
 		return "Unknown"
 
 # Applying to setUse
-setUse["State"] = [assign(x) for x in setUse['ZIP Code']]
+insurance["State"] = [assign(x) for x in insurance["ZIP Code"]]
 # Dropping "Unknowns"
-setUse = setUse[setUse["State"] != "Unknown"]
+insurance = insurance[insurance["State"] != "Unknown"]
 
 
 # Page Layout
@@ -187,7 +177,7 @@ layout =  html.Div([
     Input("mapToggle", "value")]
 )
 def mapSet(mapYearSlider, mapToggle):
-	setUseYearState = setUse[setUse['Year'] == mapYearSlider].groupby("State").mean("Loss Ratio").reset_index()
+	setUseYearState = insurance[insurance['Year'] == mapYearSlider].groupby("State").mean("Loss Ratio").reset_index()
 	setUseYearState["Loss Ratio"] = setUseYearState["Loss Ratio"] * 100
 	if mapToggle == False:
 		mapDisplay = px.choropleth(

@@ -1,40 +1,33 @@
 #This page will construct a Bar Chart displaying the Mean Premium Per Policy as a function of zipcode (state).
  #Mean Premium per Polciy will be displayed decendingly on a color scale by state.
  #The graph will be adjustable by year as well as by policy type (decile grouping)
-  
 
 #Importing Libraries
 from dash import Dash, html, dcc, Input, Output, callback, register_page
 import pandas as pd
 import plotly.express as px
 
+# Registering page in main app
 register_page(__name__, path="/Insurance3")
 
-# Raw dataset
+# Datasets
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
 
-# Create dataframe
-df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile Grouping"]].rename(
-    columns={
-        "ZIP Code": "zip",
-        "Year": "year",
-        "Premiums Per Policy": "premium_per_policy",
-        "Policy Decile Grouping": "policy_decile_grouping",
-    }
-)
+# Filter for useful variables
+insurance = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile Grouping"]]
+
 
 # Make a numeric decile conversion and cleaning 
-df["decile"] = pd.to_numeric(df["policy_decile_grouping"], errors="coerce").astype(int) 
-deciles = sorted(df["decile"].dropna().unique().astype(int))
+insurance["Policy Decile Grouping"] = pd.to_numeric(insurance["Policy Decile Grouping"], errors="coerce").astype(int) 
+deciles = sorted(insurance["Policy Decile Grouping"].dropna().unique().astype(int))
 
 #Making a numeric year conversion and cleaning
-years = sorted(pd.to_numeric(df["year"], errors = "coerce").dropna().unique().astype(int))
+years = sorted(pd.to_numeric(insurance["Year"], errors = "coerce").dropna().unique().astype(int))
 
-# ZIP Code to states dictionaries taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
-
-# Creating a dictionary to later assign to our DataFrame.
+# Creating a dictionary for Z code to state assignment
+# ZIP code mapping taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 states_dict = {}
-# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except some exceptions.
+# This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except the northeast.
 x = 0
 while x < 1:
 	for i in list(range(350,353)) + list(range(354,370)):
@@ -128,7 +121,7 @@ while x < 1:
 	states_dict = {str(key): value for key, value in states_dict.items()}
 	x += 1
 
-# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded in this scenario as their zip codes begin with 0.
+# CT, ME, NH, NJ, MA, RI, and VT must be hardcoded as their zip codes begin with 0 and don't work with the range() function.
 states_dict.update({
 	"060":"CT","061":"CT","062":"CT","063":"CT","064":"CT","065":"CT","066":"CT","067":"CT","068":"CT","069":"CT", #CT
 	"039":"ME","040":"ME","041":"ME","042":"ME","043":"ME","044":"ME","045":"ME","046":"ME","047":"ME","048":"ME","049":"ME", #ME
@@ -140,12 +133,12 @@ states_dict.update({
 	"050":"VT","051":"VT","052":"VT","053":"VT","054":"VT","056":"VT","057":"VT","058":"VT","059":"VT" #VT
 })
 
-# This function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
+# This helper function cuts passed zip codes into the first 3 digits: the highest level zip code which determines state.
 def cutter(zipCode):
 	zipCode = str(zipCode[0:3])
 	return zipCode
 
-# This function assigns the cut zip code to a state in states_dict and error checks
+# This helper function assigns the cut zip code to a state in states_dict.
 def assign(zipCode):
 	try:
 		zipCode = cutter(zipCode)
@@ -155,10 +148,10 @@ def assign(zipCode):
 		return "Unknown"
 
 #Applying to df
-df["state"] = [assign(x) for x in df['zip']]
+insurance["State"] = [assign(x) for x in insurance['ZIP Code']]
 
 #Dropping unknowns from "state" and assignment back to the data frame
-df = df[df["state"] != "Unknown"]
+insurance = insurance[insurance["State"] != "Unknown"]
 
 #Create the layout
 layout = html.Div(
@@ -221,25 +214,26 @@ def update_graph(selected_year, selected_decile):
 	z = selected_decile if selected_decile is not None else int(min(deciles))
 
 	# Filter to year + decile
-	d = df[(df["year"] == y) & (df["decile"] == z)].copy()
+	d = insurance[(insurance["Year"] == y) & (insurance["Policy Decile Grouping"] == z)].copy()
 
 	# Calculating the mean of Premium Per Policy and sorting by the values
 	grouped = (
-		d.groupby("state", as_index=False)
-		.agg(mean_premium=("premium_per_policy", "mean"), n=("premium_per_policy", "size"))
+		d.groupby("State", as_index=False)
+		.agg(mean_premium=("Premiums Per Policy", "mean"), n=("Premiums Per Policy", "size"))
 		.sort_values("mean_premium", ascending=False)
 	)
 
 	# Creating the Bar Chart
 	fig = px.bar(
 		grouped,
-		x="state",
+		x="State",
 		y="mean_premium",
 		title=f"Mean Premium per Policy by State  — Year {y}, Decile {z}",
 		labels={"mean_premium": "Mean Premium ($)", "state": "State"},
 		hover_data={"n": True, "mean_premium": ":.2f"},
 		color="mean_premium",
-		color_continuous_scale="hot_r",
+		color_continuous_scale="darkmint",
+		range_color=(10,4000)
 	)
 
 	# Updating the layout of the chart
