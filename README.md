@@ -24,16 +24,24 @@ dash, html, dcc, Input, Output, callback no_update, register_page, pandas, dash_
 
 AI Disclosure:
 main app:
+
     - pulled directly from in class notes. 
     - No AI used 
+    
 main page: used ChatGPT for two lines of code
+
     code line: "dcc.Location(id="url",refresh=False)". Asked AI how to use dcc to link as a location for the URL in the main app. 
+    
 page w/ Insurance2: 
+
     - used only for debugging and checking errors, not to generate code
+    
 page w/ Insurance3:
+
     - used for debugging and checking errors 
     - used in the callbacks for updated the graph for selected year and selected decile 
     - used for calculating the mean for premium per policy
     - used to filter year and decile
     - used to find fig.update_yaxes
+
 
