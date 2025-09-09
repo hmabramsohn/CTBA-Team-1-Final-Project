@@ -183,7 +183,6 @@ layout = html.Div(
                     value=int(min(years)),
                     marks={int(y): str(int(y)) for y in years},
                     tooltip={"placement": "bottom", "always_visible": False},
-                    #style={"marginBottom": "50px"},
                 ),
                 html.Br(),
                 
@@ -196,7 +195,6 @@ layout = html.Div(
                     multi=False,
                     clearable=True,
                     className="dropdown",
-                    style={"marginBottom": "50px"},
                     ),
                 
                 html.Div(className="my-3"),
@@ -261,5 +259,11 @@ def update_graph(selected_year, selected_decile):
 	return fig
 
 # For local testing
+<<<<<<< HEAD
 #if __name__ == "__main__":
 #	app.run(debug=True)
+=======
+if __name__ == "__main__":
+	app.run(debug=True)
+
+>>>>>>> d477707abf627522e0a434aa2a95d1c6e7d8d90c
