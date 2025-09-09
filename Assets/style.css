@@ -5,6 +5,7 @@ body {
     line-height: 1.6;
     padding: 20px;
     font: 16px Arial, sans-serif;
+    font-family: monospace;
 }
 
 /* Header styles */
@@ -13,12 +14,6 @@ header {
     color: #fff;
     padding: 1.5rem 0;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
 }
 
 a {
@@ -49,8 +44,7 @@ main {
     margin: 2rem auto;
     background: #fff;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 8px; 
 }
 
 /* Headings */
