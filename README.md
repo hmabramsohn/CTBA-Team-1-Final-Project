@@ -9,7 +9,6 @@ All code should run through the InsuranceApp.py and create a link to our website
 How to run it: Local & Deploy Notes: Render 
 All pages should be connected to an external URL. No additional running is needed. 
 
-
 Data Sources & Data Dictionary: (explain what your variables and why you chose them)
 The data source is labeled: "Supporting Underlying Metrics and Disclaimer for Analyses of US Homeowners Insurance Markets 2018-20". It is the only data source that we used in this multipage dash website. The variables we used are: Paid Loss ratio, premium per policy, policy decile grouping, zip code and year. Below are definitions of the variables: 
     
@@ -18,7 +17,6 @@ Paid Loss Ratio: The amount insurers have paid on claims to or on behalf of poli
 Premium Per Policy: The average cost of a policy.  Premiums may be related to a number of factors, such as climate-related risk, inflation, costs of reconstruction, and reinsurance, as discussed in Section III.B.(directly dfrom data source)
 
 Policy decile grouping: ranking insurance. Breaks up the policy into 10 groups (in our data) therfore each decile will have 10% of the data. 1st decile contains the policy hodler with the lowest risk profile and 10th decile contains the policy holder with the highest risk profile. 
-
 
 List all of the packages used: 
 dash, html, dcc, Input, Output, callback no_update, register_page, pandas, dash_bootstrap, dash_components, dash_daq, plotly.express
@@ -40,7 +38,3 @@ used in the callbacks for updated the graph for selected year and selected decil
 used for calculating the mean for premium per policy
 used to filter year and decile
 used to find fig.update_yaxes
-
-
-
-
