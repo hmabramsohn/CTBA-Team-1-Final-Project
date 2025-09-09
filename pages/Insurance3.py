@@ -156,8 +156,8 @@ insurance = insurance[insurance["State"] != "Unknown"]
 layout = html.Div(
     id = "premium-page", className = "page premium-page",
     children=[
-        html.H1("Mean Premium per Policy by State from 2018-2022", className="page-title"),
-        html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the Mean Premium per Policy for each State in the US that can be filtered by Year and Decile Grouping."),
+        html.H1("Mean Premium per Policy by State from 2018-2022", className="page-title", style={'textAlign': 'center'),
+        html.P("The Mean Premium is the average amount of money people pay for an insurance policy. This chart shows the Mean Premium per Policy for each State in the US that can be filtered by Year and Decile Grouping. The first decile contains the policies with the highest risk profile, and the tenth decile contains the policies with the highest risk profile."),
         html.Div(
             #Define input values
             id="controls", className="controls",
@@ -240,7 +240,7 @@ def update_graph(selected_year, selected_decile):
 
 	# Updating the layout of the chart
 	fig.update_layout(
-		yaxis_title="USD",
+		yaxis_title="Mean Premium (USD)",
 		xaxis_title="States",
 		margin=dict(l=0, r=0, t=50, b=0)
 	)
@@ -250,6 +250,7 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
 
 
 
