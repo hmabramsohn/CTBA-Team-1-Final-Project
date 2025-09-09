@@ -4,14 +4,14 @@
   
 
 #Importing Libraries
-from dash import Dash, html, dcc, Input, Output, callback, dash
+from dash import Dash, html, dcc, Input, Output, callback, register_page
 import pandas as pd
 import plotly.express as px
-import dash_labs
+#import dash_labs
 
 # For local testing
 #app = Dash(__name__)
-dash_labs.plugins.register_page(__name__, path="/Insurance3")
+register_page(__name__, path="/Insurance3")
 
 # Raw dataset
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
@@ -259,11 +259,5 @@ def update_graph(selected_year, selected_decile):
 	return fig
 
 # For local testing
-<<<<<<< HEAD
 #if __name__ == "__main__":
 #	app.run(debug=True)
-=======
-if __name__ == "__main__":
-	app.run(debug=True)
-
->>>>>>> d477707abf627522e0a434aa2a95d1c6e7d8d90c

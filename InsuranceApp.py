@@ -11,9 +11,9 @@ app.layout = html.Div([
         children= [ 
             dbc.NavLink("Home", href="/Insurance1", active= "exact"),
             dbc.NavLink("Insurance Map", href="/Insurance2", active= "exact"),
-            dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact"),
+            dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact")
         ], 
-        brand = "Insurance App"),
+    brand = "Insurance App"),
     dash.page_container
 ])
 

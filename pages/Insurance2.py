@@ -11,7 +11,7 @@
 
 # Libraries
 import pandas as pd
-from dash import Input, Output, callback, html, dcc, Dash, dash
+from dash import Input, Output, callback, html, dcc, Dash, register_page
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import plotly.express as px
@@ -19,7 +19,7 @@ import dash_labs
 
 # For local testing
 #app = Dash(__name__)
-dash_labs.plugins.register_page(__name__, path="/Insurance2")
+register_page(__name__, path="/Insurance2")
 
 # Raw dataset
 insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
