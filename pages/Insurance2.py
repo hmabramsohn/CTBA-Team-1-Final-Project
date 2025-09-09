@@ -1,7 +1,5 @@
 # Harrison Abramsohn
 
-# This page 
-
 # Import Libraries
 import pandas as pd
 from dash import Input, Output, callback, html, dcc, Dash, register_page
@@ -177,11 +175,11 @@ layout =  html.Div([
     Input("mapToggle", "value")]
 )
 def mapSet(mapYearSlider, mapToggle):
-	setUseYearState = insurance[insurance['Year'] == mapYearSlider].groupby("State").mean("Loss Ratio").reset_index()
-	setUseYearState["Loss Ratio"] = setUseYearState["Loss Ratio"] * 100
+	insuranceYear = insurance[insurance['Year'] == mapYearSlider].groupby("State").mean("Loss Ratio").reset_index()
+	insuranceYear["Loss Ratio"] = insuranceYear["Loss Ratio"] * 100
 	if mapToggle == False:
 		mapDisplay = px.choropleth(
-			setUseYearState,
+			insuranceYear,
 			locations = "State",
 			locationmode = "USA-states",
 			color = "Loss Ratio",
@@ -191,9 +189,9 @@ def mapSet(mapYearSlider, mapToggle):
 			range_color=(0, 150)
 			)
 	else:
-		setUseYearState["Financial Loss"] = setUseYearState["Loss Ratio"] > 100
+		insuranceYear["Financial Loss"] = insuranceYear["Loss Ratio"] > 100
 		mapDisplay = px.choropleth(
-			setUseYearState,
+			insuranceYear,
 			locations = "State",
 			locationmode = "USA-states",
 			color = "Financial Loss",
