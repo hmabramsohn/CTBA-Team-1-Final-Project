@@ -134,6 +134,7 @@ def cutter(zipCode):
 	return zipCode
 
 # This helper function assigns the cut zip code to a state in states_dict.
+# This function contains an error check.
 def assign(zipCode):
 	try:
 		zipCode = cutter(zipCode)
@@ -142,11 +143,10 @@ def assign(zipCode):
 	except:
 		return "Unknown"
 
-# Applying to setUse
+# Applying to Insurance
 insurance["State"] = [assign(x) for x in insurance["ZIP Code"]]
 # Dropping "Unknowns"
 insurance = insurance[insurance["State"] != "Unknown"]
-
 
 # Page Layout
 layout =  html.Div([
