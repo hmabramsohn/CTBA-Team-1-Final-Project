@@ -211,7 +211,7 @@ layout = html.Div(
     Input("year-slider", "value"),
     Input("decile-dropdown", "value")
 )
-#Updating the graph for the Selected Year and Selected Decile
+#Updating the graph for the Selected Year and Selected Decile - Used AI to update the year and decile selection below
 def update_graph(selected_year, selected_decile):
 	y = selected_year if selected_year is not None else int(min(years))
 	z = selected_decile if selected_decile is not None else int(min(deciles))
@@ -219,7 +219,7 @@ def update_graph(selected_year, selected_decile):
 	# Filter to year + decile
 	d = insurance[(insurance["Year"] == y) & (insurance["Policy Decile Grouping"] == z)].copy()
 
-	# Calculating the mean of Premium Per Policy and sorting by the values
+	# Calculating the mean of Premium Per Policy and sorting by the values - Used AI to create the .agg function
 	grouped = (
 		d.groupby("State", as_index=False)
 		.agg(mean_premium=("Premiums Per Policy", "mean"), n=("Premiums Per Policy", "size"))
@@ -251,4 +251,5 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
 
