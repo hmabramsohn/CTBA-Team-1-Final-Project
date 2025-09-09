@@ -245,11 +245,12 @@ def update_graph(selected_year, selected_decile):
 		margin=dict(l=0, r=0, t=50, b=0)
 	)
 
-	# Updating the formatting of the y-axis
+	# Updating the formatting of the y-axis - used AI to find this function
 	fig.update_yaxes(tickprefix="$", tickformat=",.0f")
 
 	# Obtaining the Bar Chart
 	return fig
+
 
 
 
