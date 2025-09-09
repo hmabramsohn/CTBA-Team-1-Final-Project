@@ -218,7 +218,7 @@ layout = html.Div(
     Input("year-slider", "value"),
     Input("decile-dropdown", "value")
 )
-#Updating the graph for the Selected Year
+#Updating the graph for the Selected Year and Selected Decile
 def update_graph(selected_year, selected_decile):
 	y = selected_year if selected_year is not None else int(min(years))
 	z = selected_decile if selected_decile is not None else int(min(deciles))
@@ -255,7 +255,7 @@ def update_graph(selected_year, selected_decile):
 	# Updating the formatting of the y-axis
 	fig.update_yaxes(tickprefix="$", tickformat=",.0f")
 
-	# Obtaining the chart
+	# Obtaining the Bar Chart
 	return fig
 
 # For local testing
@@ -267,3 +267,4 @@ if __name__ == "__main__":
 	app.run(debug=True)
 
 >>>>>>> d477707abf627522e0a434aa2a95d1c6e7d8d90c
+
