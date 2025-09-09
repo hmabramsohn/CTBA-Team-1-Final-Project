@@ -1,20 +1,35 @@
 import dash 
-from dash import html 
+from dash import html, dcc, Input, Output, callback, no_update
+
+# Ethiana Hacsh 
 
 dash.register_page(__name__, path="/") # establishing that this is the home page 
 
 layout=html.Div([
     html.H2("US Homeowners Insurance Markets Home"),
-    html.P("Looking at the data from 2018 - 2022")
-])
+    html.P("Looking at the data from 2018 - 2022"),
+    html.Button("View Insurance2.py", id="btn-1", n_clicks=0), #pulled from page2.py notes
+    html.Button("View Insurance3.py", id="btn-2", n_clicks=0),
+    dcc.Location(html.Div(id="url", refresh=True)) # AI help used on 9/8/2025 # gives an ID to target within the callbacks and can change the url. Like a router anchor
+]) 
 
-# Adding a callback here 
-    # Can add: button clicks, sliders, "children", etc. 
 
+# Adding a button
 @callback(
-    Output("", ""),
-    Input("", "")
-    
+    Output("url", "href"),
+    [Input("btn-1", "n_clicks"),
+    Input("btn-2", "n_clicks")] # got from NasaWCallbacks 
 )
 
-# adding def and if statment here too
+def navigate(btn1, btn2):
+    if btn1:
+        return "/Insurance2"
+    if btn2:
+        return "/Insurance3"
+    return no_update #AI used on 9/8/2025 # keeping the page stable if no action is needed. Nothing clicked and URL is not changed. Tells Dash to keep the current value
+        
+
+# compare with hers on github
+
+# add any AI assistnace comment block in code
+
