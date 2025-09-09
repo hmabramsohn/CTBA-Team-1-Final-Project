@@ -10,7 +10,7 @@ layout=html.Div([
     html.P("Looking at the data from 2018 - 2022"),
     html.Button("View Insurance2.py", id="btn-1", n_clicks=0), #pulled from page2.py notes
     html.Button("View Insurance3.py", id="btn-2", n_clicks=0),
-    dcc.Location(html.Div(id="url", refresh=True)) # AI help used on 9/8/2025 # gives an ID to target within the callbacks and can change the url. Like a router anchor
+    dcc.Location(html.Div(id="url")) # AI help used on 9/8/2025 # gives an ID to target within the callbacks and can change the url. Like a router anchor
 ]) 
 
 
