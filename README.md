@@ -9,7 +9,7 @@ Run InsuranceApp.py after installing all required packages. Access the local sit
 
 Data Sources & Data Dictionary: 
 
-The data source is labeled: "Supporting Underlying Metrics and Disclaimer for Analyses of US Homeowners Insurance Markets 2018-20". It is the only data source that we used in this multipage dash website. The variables we used are: Paid Loss Ratio, Premium per Policy, Policy Decile Grouping, Zip Code and Year. Below are definitions of the variables: 
+The data source, from the U.S. Treasury Department, is labeled: "Supporting Underlying Metrics and Disclaimer for Analyses of US Homeowners Insurance Markets 2018-20". A link to the dataset can be found on this page: https://home.treasury.gov/news/press-releases/jy2791. The variables we used are: Paid Loss Ratio, Premium per Policy, Policy Decile Grouping, Zip Code and Year. Below are definitions of the variables: 
     
 Paid Loss Ratio: The amount insurers have paid on claims to or on behalf of policyholders relative to premiums received and helps assess insurers’ underwriting profitability.Sustained high paid loss ratios may lead insurers to request rate increases, change policy terms and conditions, decide not to renew policies, or exit a market entirely.  Thus, years with high paid loss ratios may precede changes in availability and cost. (directly from data source)
 
