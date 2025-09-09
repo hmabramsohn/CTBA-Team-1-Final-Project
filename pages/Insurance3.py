@@ -10,10 +10,10 @@ import plotly.express as px
 
 # For local testing
 app = Dash(__name__)
-register_page(__name__)
+#register_page(__name__)
 
 # Raw dataset
-insurance = pd.read_excel("Insurance/data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
+insurance = pd.read_excel("data/Insurance.xlsx", dtype={"ZIP Code":str}, sheet_name=2)
 
 # Create dataframe
 df = insurance.loc[:, ["ZIP Code", "Year", "Premiums Per Policy", "Policy Decile Grouping"]].rename(
@@ -182,7 +182,7 @@ app.layout = html.Div(
                     value=int(min(years)),
                     marks={int(y): str(int(y)) for y in years},
                     tooltip={"placement": "bottom", "always_visible": False},
-                    style={"marginBottom": "50px"},
+                    #style={"marginBottom": "50px"},
                 ),
                 html.Br(),
                 
