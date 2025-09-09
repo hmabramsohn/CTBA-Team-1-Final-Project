@@ -7,9 +7,10 @@ app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True, title= "
 server = app.server  # Expose the server variable for deployments
 
 app.layout = html.Div([ 
+    
     dbc.NavbarSimple(
         children= [ 
-            dbc.NavLink("Home", href="/Insurance1", active= "exact"),
+            dbc.NavLink("Home", href="/", active= "exact"),
             dbc.NavLink("Insurance Map", href="/Insurance2", active= "exact"),
             dbc.NavLink("Insurance Graph", href="/Insurance3", active= "exact")
         ], 

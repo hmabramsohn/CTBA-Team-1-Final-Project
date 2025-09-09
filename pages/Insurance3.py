@@ -261,12 +261,3 @@ def update_graph(selected_year, selected_decile):
 # For local testing
 #if __name__ == "__main__":
 #	app.run(debug=True)
-<<<<<<< HEAD
-=======
-=======
-if __name__ == "__main__":
-	app.run(debug=True)
-
->>>>>>> d477707abf627522e0a434aa2a95d1c6e7d8d90c
-
->>>>>>> 331d312c277a81a819754f43e256fb084e16d4ce

@@ -4,7 +4,7 @@ from dash import html, dcc, Input, Output, callback, no_update, register_page
 
 # Ethiana Hacsh 
 
-register_page(__name__, path="/Insurance1") # establishing that this is the home page 
+register_page(__name__, path="/") # establishing that this is the home page 
 
 layout=html.Div([
     html.H2("US Homeowners Insurance Markets Home"),
