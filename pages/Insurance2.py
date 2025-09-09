@@ -19,7 +19,7 @@ years = [str(year) for year in years]
 # Filtering for useful variables
 insurance = (insurance.loc[:,["ZIP Code", "Year", "Loss Ratio"]])
 
-# Creating a dictionary for Z code to state assignment
+# Creating a dictionary for ZIP code to state assignment
 # ZIP code mapping taken from https://www.irs.gov/pub/irs-utl/zip_code_and_state_abbreviations.pdf
 states_dict = {}
 # This loop assigns a range of three-digit numbers, representing the highest level zip code, to every U.S. state except the northeast.
