@@ -149,12 +149,18 @@ def cutter(zipCode):
 
 # This function assigns the cut zip code to a state in states_dict.
 def assign(zipCode):
-	zipCode = cutter(zipCode)
-	state = states_dict[zipCode]
-	return state
+	try:
+		zipCode = cutter(zipCode)
+		state = states_dict[zipCode]
+		return state
+	except:
+		return "Unknown"
 
 # Applying to setUse
 setUse["State"] = [assign(x) for x in setUse['ZIP Code']]
+# Dropping "Unknowns"
+setUse = setUse[setUse["State"] != "Unknown"]
+
 
 # Page Layout
 app.layout =  html.Div([

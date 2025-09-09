@@ -154,7 +154,7 @@ def assign(zipCode):
 		state = states_dict[zipCode]
 		return state
 	except:
-		return None
+		return "Unknown"
 
 #Applying to df
 df["state"] = [assign(x) for x in df['zip']]
