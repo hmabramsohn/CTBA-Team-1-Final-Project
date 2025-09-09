@@ -218,7 +218,7 @@ def update_graph(selected_year, selected_decile):
 	# Filter to year + decile - Used AI for formatting of this code to filter
 	d = insurance[(insurance["Year"] == y) & (insurance["Policy Decile Grouping"] == z)].copy()
 
-	# Calculating the mean of Premium Per Policy and sorting by the values - Used AI to create the .agg function
+	# Calculating the mean of Premium Per Policy and sorting by the values - Used AI to create the .agg function and calculating the mean
 	grouped = (
 		d.groupby("State", as_index=False)
 		.agg(mean_premium=("Premiums Per Policy", "mean"), n=("Premiums Per Policy", "size"))
@@ -250,6 +250,7 @@ def update_graph(selected_year, selected_decile):
 
 	# Obtaining the Bar Chart
 	return fig
+
 
 
 
